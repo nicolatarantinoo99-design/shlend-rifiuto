@@ -144,7 +144,7 @@
 
     // WEBHOOK DEL NUOVO FLOW ACTIVEPIECES
     const webhook =
-        "https://cloud.activepieces.com/api/v1/webhooks/6YOLOLxs0StckGzpWsw5g";
+    "https://cloud.activepieces.com/api/v1/webhooks/77I35a0lKgE27zcXTZGkj";
 
 
     // Recupera il numero della riga dall'URL
@@ -164,23 +164,38 @@
     // Invia il motivo scelto
     function inviaRifiuto(motivo) {
 
-        if (!riga) {
+    if (!riga) {
+        alert("Numero della riga non presente.");
+        return;
+    }
 
-            alert("Numero della riga non presente.");
+    const form = document.createElement("form");
 
-            return;
-        }
+    form.method = "POST";
+    form.action = webhook;
 
+    const azioneInput = document.createElement("input");
+    azioneInput.type = "hidden";
+    azioneInput.name = "azione";
+    azioneInput.value = "rifiuta";
 
-        const url =
-            webhook
-            + "?azione=rifiuta"
-            + "&riga=" + encodeURIComponent(riga)
-            + "&motivo=" + encodeURIComponent(motivo);
+    const rigaInput = document.createElement("input");
+    rigaInput.type = "hidden";
+    rigaInput.name = "riga";
+    rigaInput.value = riga;
 
+    const motivoInput = document.createElement("input");
+    motivoInput.type = "hidden";
+    motivoInput.name = "motivo";
+    motivoInput.value = motivo;
 
-        window.location.href = url;
+    form.appendChild(azioneInput);
+    form.appendChild(rigaInput);
+    form.appendChild(motivoInput);
 
+    document.body.appendChild(form);
+
+    form.submit();
     }
 
 

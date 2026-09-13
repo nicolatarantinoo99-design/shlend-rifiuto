@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nuovo appuntamento - Shlend</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        h1 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 25px;
+        }
+
+        h2 {
+            font-size: 21px;
+            margin-top: 0;
+        }
+
+        p {
+            line-height: 1.5;
+        }
+
+        .button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: #198754;
+            color: white;
+        }
+
+        .secondary {
+            background: #0d6efd;
+            color: white;
+        }
+
+        .gray {
+            background: #6c757d;
+            color: white;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #842029;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .success {
+            background: #d1e7dd;
+            color: #0f5132;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .summary p {
+            margin: 8px 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 14px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .field-button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .field-button:hover {
+            background: #f5f5f5;
+        }
+
+        .small {
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- CARICAMENTO -->
+    <div id="loading">
+        <h1>Shlend</h1>
+        <div class="loading">
+            <p>Recupero dei dati della precedente richiesta...</p>
+        </div>
+    </div>
+
+
+    <!-- ERRORE -->
+    <div id="errorBox" class="hidden">
+        <h1>Shlend</h1>
+        <div class="error">
+            <strong>Impossibile recuperare la richiesta.</strong>
+            <p id="errorMessage">
+                Si è verificato un errore.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- SCELTA INIZIALE -->
+    <div id="startBox" class="hidden">
+
+        <h1>Nuovo appuntamento</h1>
+
+        <p>
+            Abbiamo recuperato i dati della tua precedente richiesta.
+        </p>
+
+        <h2>Vuoi mantenere tutti i dati della precedente richiesta?</h2>
+
+        <button class="button primary" onclick="mantieniDati()">
+            Mantieni tutti i dati e richiedi una nuova data
+        </button>
+
+        <button class="button secondary" onclick="modificaDati()">
+            Modifica alcuni dati
+        </button>
+
+    </div>
+
+
+    <!-- MODIFICA DATI -->
+    <div id="modifyBox" class="hidden">
+
+        <h1>Modifica dati</h1>
+
+        <p>
+            Seleziona il dato che vuoi modificare.
+        </p>
+
+        <button class="field-button" onclick="modificaCampo('nome')">
+            Nome
+        </button>
+
+        <button class="field-button" onclick="modificaCampo('telefono')">
+            Numero di telefono
+        </button>
+
+        <button class="field-button" onclick="modificaCampo('servizio')">
+            Servizio
+        </button>
+
+        <button class="field-button" onclick="modificaCampo('indirizzo')">
+            Indirizzo
+        </button>
+
+        <button class="field-button" onclick="modificaCampo('preferenze')">
+            Esigenze particolari
+        </button>
+
+        <button class="field-button" onclick="modificaCampo('preferenza_contatto')">
+            Preferenza di contatto
+        </button>
+
+        <button class="field-button" onclick="modificaCampo('email')">
+            E-mail
+        </button>
+
+        <button class="button gray" onclick="annullaModifica()">
+            Annulla modifica e conferma dati
+        </button>
+
+    </div>
+
+
+    <!-- MODIFICA SINGOLO CAMPO -->
+    <div id="editFieldBox" class="hidden">
+
+        <h1>Modifica dato</h1>
+
+        <label id="fieldLabel"></label>
+
+        <input
+            type="text"
+            id="fieldInput"
+            placeholder=""
+        >
+
+        <button class="button primary" onclick="salvaCampo()">
+            Salva modifica
+        </button>
+
+        <button class="button gray" onclick="tornaModifica()">
+            Indietro
+        </button>
+
+    </div>
+
+
+    <!-- CONFERMA MODIFICHE -->
+    <div id="modifiedSummaryBox" class="hidden">
+
+        <h1>Riepilogo dati</h1>
+
+        <div id="modifiedSummary" class="summary"></div>
+
+        <button class="button primary" onclick="confermaModifica()">
+            Conferma modifica e procedi
+        </button>
+
+        <button class="button gray" onclick="annullaModifica()">
+            Annulla modifica e conferma dati
+        </button>
+
+    </div>
+
+
+    <!-- SCELTA DATA -->
+    <div id="dateBox" class="hidden">
+
+        <h1>Nuova data</h1>
+
+        <p>
+            Scegli la nuova data per il tuo appuntamento.
+        </p>
+
+        <label for="newDate">
+            Data
+        </label>
+
+        <input
+            type="date"
+            id="newDate"
+        >
+
+        <button class="button primary" onclick="continuaData()">
+            Continua
+        </button>
+
+    </div>
+
+
+    <!-- SCELTA ORARIO -->
+    <div id="timeBox" class="hidden">
+
+        <h1>Fascia oraria</h1>
+
+        <p>
+            Scegli la fascia oraria preferita.
+        </p>
+
+        <button class="field-button" onclick="selezionaOrario('08:00 - 09:00')">
+            08:00 - 09:00
+        </button>
+
+        <button class="field-button" onclick="selezionaOrario('09:00 - 10:00')">
+            09:00 - 10:00
+        </button>
+
+        <button class="field-button" onclick="selezionaOrario('10:00 - 11:00')">
+            10:00 - 11:00
+        </button>
+
+        <button class="field-button" onclick="selezionaOrario('11:00 - 12:00')">
+            11:00 - 12:00
+        </button>
+
+        <button class="field-button" onclick="selezionaOrario('12:00 - 13:00')">
+            12:00 - 13:00
+        </button>
+
+        <button class="field-button" onclick="selezionaOrario('13:00 - 14:00')">
+            13:00 - 14:00
+        </button>
+
+        <button class="field-button" onclick="selezionaOrario('14:00 - 15:00')">
+            14:00 - 15:00
+        </button>
+
+        <button class="field-button" onclick="selezionaOrario('15:00 - 16:00')">
+            15:00 - 16:00
+        </button>
+
+        <button class="field-button" onclick="selezionaOrario('16:00 - 17:00')">
+            16:00 - 17:00
+        </button>
+
+        <button class="field-button" onclick="selezionaOrario('17:00 - 18:00')">
+            17:00 - 18:00
+        </button>
+
+    </div>
+
+
+    <!-- RIEPILOGO FINALE -->
+    <div id="summaryBox" class="hidden">
+
+        <h1>Riepilogo richiesta</h1>
+
+        <div id="finalSummary" class="summary"></div>
+
+        <button class="button primary" onclick="inviaNuovaRichiesta()">
+            Conferma e invia richiesta
+        </button>
+
+        <button class="button gray" onclick="modificaDati()">
+            Modifica i dati
+        </button>
+
+    </div>
+
+
+    <!-- SUCCESSO -->
+    <div id="successBox" class="hidden">
+
+        <div class="success">
+
+            <h1>Richiesta inviata</h1>
+
+            <p>
+                La tua richiesta di prenotazione è stata inviata correttamente.
+            </p>
+
+            <p>
+                Riceverai l'esito della richiesta, positivo o negativo,
+                tramite la modalità di contatto che hai scelto:
+                e-mail o telefono.
+            </p>
+
+            <p>
+                La conferma definitiva dipenderà dalla disponibilità
+                della data e della fascia oraria richieste.
+            </p>
+
+            <p>
+                Grazie per la fiducia e per aver scelto <strong>Shlend</strong>.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /*
+     * WEBHOOK ACTIVEPIECES
+     */
+    const WEBHOOK_RECUPERO =
+        "https://cloud.activepieces.com/api/v1/webhooks/wAzBOWZNmbXk0DWMZL6iM";
+
+
+    /*
+     * DATI DELLA RICHIESTA
+     */
+    let dati = {
+        riga: "",
+        nome: "",
+        telefono: "",
+        servizio: "",
+        prezzo: "",
+        indirizzo: "",
+        data: "",
+        fascia_oraria: "",
+        preferenze: "",
+        preferenza_contatto: "",
+        email: ""
+    };
+
+
+    let campoInModifica = "";
+
+
+    /*
+     * FUNZIONE PER MOSTRARE UNA SEZIONE
+     */
+    function mostra(id) {
+
+        const sezioni = [
+            "loading",
+            "errorBox",
+            "startBox",
+            "modifyBox",
+            "editFieldBox",
+            "modifiedSummaryBox",
+            "dateBox",
+            "timeBox",
+            "summaryBox",
+            "successBox"
+        ];
+
+        sezioni.forEach(function(sezione) {
+
+            document.getElementById(sezione)
+                .classList.add("hidden");
+
+        });
+
+        document.getElementById(id)
+            .classList.remove("hidden");
+    }
+
+
+    /*
+     * RECUPERA LA RIGA DALL'URL
+     *
+     * Esempio:
+     * nuovo-appuntamento.html?riga=12
+     */
+    const parametri =
+        new URLSearchParams(window.location.search);
+
+    const riga =
+        parametri.get("riga");
+
+
+    /*
+     * RECUPERA I DATI DA ACTIVEPIECES
+     */
+    async function recuperaDati() {
+
+        if (!riga) {
+
+            mostra("errorBox");
+
+            document.getElementById("errorMessage").innerText =
+                "Numero della richiesta non presente.";
+
+            return;
+        }
+
+
+        try {
+
+            const risposta = await fetch(
+                WEBHOOK_RECUPERO,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        riga: riga
+                    })
+                }
+            );
+
+
+            if (!risposta.ok) {
+
+                throw new Error(
+                    "Errore nella comunicazione con il server."
+                );
+
+            }
+
+
+            const risultato =
+                await risposta.json();
+
+
+            if (!risultato || !risultato.nome) {
+
+                throw new Error(
+                    "I dati della richiesta non sono disponibili."
+                );
+
+            }
+
+
+            dati = risultato;
+
+
+            mostra("startBox");
+
+        } catch (errore) {
+
+            console.error(errore);
+
+            mostra("errorBox");
+
+            document.getElementById("errorMessage").innerText =
+                "Non è stato possibile recuperare i dati della precedente richiesta.";
+
+        }
+
+    }
+
+
+    /*
+     * MANTIENE TUTTI I DATI
+     */
+    function mantieniDati() {
+
+        mostra("dateBox");
+
+    }
+
+
+    /*
+     * MODIFICA DATI
+     */
+    function modificaDati() {
+
+        mostra("modifyBox");
+
+    }
+
+
+    /*
+     * MODIFICA SINGOLO CAMPO
+     */
+    function modificaCampo(campo) {
+
+        campoInModifica = campo;
+
+
+        const labels = {
+
+            nome: "Nome",
+
+            telefono: "Numero di telefono",
+
+            servizio: "Servizio",
+
+            indirizzo: "Indirizzo",
+
+            preferenze: "Esigenze particolari",
+
+            preferenza_contatto: "Preferenza di contatto",
+
+            email: "E-mail"
+
+        };
+
+
+        document.getElementById("fieldLabel").innerText =
+            labels[campo];
+
+
+        document.getElementById("fieldInput").value =
+            dati[campo] || "";
+
+
+        document.getElementById("fieldInput").placeholder =
+            "Inserisci il nuovo valore";
+
+
+        mostra("editFieldBox");
+
+    }
+
+
+    /*
+     * SALVA MODIFICA
+     */
+    function salvaCampo() {
+
+        const valore =
+            document.getElementById("fieldInput")
+                .value
+                .trim();
+
+
+        if (!valore) {
+
+            alert("Inserisci un valore.");
+
+            return;
+
+        }
+
+
+        dati[campoInModifica] = valore;
+
+
+        mostraRiepilogoModifiche();
+
+    }
+
+
+    /*
+     * RIEPILOGO MODIFICHE
+     */
+    function mostraRiepilogoModifiche() {
+
+        document.getElementById("modifiedSummary")
+            .innerHTML = creaRiepilogo();
+
+
+        mostra("modifiedSummaryBox");
+
+    }
+
+
+    /*
+     * CONFERMA MODIFICA
+     */
+    function confermaModifica() {
+
+        mostra("dateBox");
+
+    }
+
+
+    /*
+     * ANNULLA MODIFICA
+     */
+    function annullaModifica() {
+
+        mostra("dateBox");
+
+    }
+
+
+    /*
+     * TORNA ALLA LISTA MODIFICHE
+     */
+    function tornaModifica() {
+
+        mostra("modifyBox");
+
+    }
+
+
+    /*
+     * NUOVA DATA
+     */
+    function continuaData() {
+
+        const nuovaData =
+            document.getElementById("newDate").value;
+
+
+        if (!nuovaData) {
+
+            alert("Seleziona una data.");
+
+            return;
+
+        }
+
+
+        dati.data = nuovaData;
+
+        mostra("timeBox");
+
+    }
+
+
+    /*
+     * NUOVO ORARIO
+     */
+    function selezionaOrario(orario) {
+
+        dati.fascia_oraria = orario;
+
+        mostraRiepilogoFinale();
+
+    }
+
+
+    /*
+     * RIEPILOGO FINALE
+     */
+    function mostraRiepilogoFinale() {
+
+        document.getElementById("finalSummary")
+            .innerHTML = creaRiepilogo();
+
+
+        mostra("summaryBox");
+
+    }
+
+
+    /*
+     * CREA RIEPILOGO
+     */
+    function creaRiepilogo() {
+
+        return `
+
+            <p>
+                <strong>Nome:</strong>
+                ${escapeHtml(dati.nome)}
+            </p>
+
+            <p>
+                <strong>Telefono:</strong>
+                ${escapeHtml(dati.telefono)}
+            </p>
+
+            <p>
+                <strong>Servizio:</strong>
+                ${escapeHtml(dati.servizio)}
+            </p>
+
+            <p>
+                <strong>Prezzo:</strong>
+                ${escapeHtml(dati.prezzo)} €
+            </p>
+
+            <p>
+                <strong>Indirizzo:</strong>
+                ${escapeHtml(dati.indirizzo)}
+            </p>
+
+            <p>
+                <strong>Data:</strong>
+                ${escapeHtml(dati.data)}
+            </p>
+
+            <p>
+                <strong>Fascia oraria:</strong>
+                ${escapeHtml(dati.fascia_oraria)}
+            </p>
+
+            <p>
+                <strong>Esigenze particolari:</strong>
+                ${escapeHtml(dati.preferenze)}
+            </p>
+
+            <p>
+                <strong>Preferenza di contatto:</strong>
+                ${escapeHtml(dati.preferenza_contatto)}
+            </p>
+
+            <p>
+                <strong>E-mail:</strong>
+                ${escapeHtml(dati.email || "Non indicata")}
+            </p>
+
+        `;
+
+    }
+
+
+    /*
+     * SICUREZZA HTML
+     */
+    function escapeHtml(valore) {
+
+        if (!valore) {
+            return "";
+        }
+
+        return String(valore)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /*
+     * AVVIO
+     */
+    recuperaDati();
+
+</script>
+
+</body>
+</html>

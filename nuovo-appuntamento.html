@@ -541,15 +541,19 @@ function mostra(id) {
 
     sezioni.forEach(function(sezione) {
 
-        document
-            .getElementById(sezione)
-            .classList.add("hidden");
+        const elemento = document.getElementById(sezione);
+
+        if (elemento) {
+            elemento.classList.add("hidden");
+        }
 
     });
 
-    document
-        .getElementById(id)
-        .classList.remove("hidden");
+    const destinazione = document.getElementById(id);
+
+    if (destinazione) {
+        destinazione.classList.remove("hidden");
+    }
 
 }
 
@@ -562,10 +566,11 @@ const riga =
 
 
 /*
- * RECUPERO DATI
- *
- * Inviamo JSON al webhook Activepieces.
- */
+==================================================
+RECUPERO DATI DA ACTIVEPIECES
+==================================================
+*/
+
 async function recuperaDati() {
 
     if (!riga) {
@@ -573,7 +578,7 @@ async function recuperaDati() {
         mostra("errorBox");
 
         document.getElementById("errorMessage").innerText =
-            "Numero della richiesta non presente.";
+            "Numero della richiesta non presente nell'indirizzo.";
 
         return;
 
@@ -582,26 +587,41 @@ async function recuperaDati() {
 
     try {
 
-        const risposta = await fetch(
-            WEBHOOK_RECUPERO,
-            {
-                method: "POST",
+        /*
+        Usiamo application/x-www-form-urlencoded
+        per evitare il preflight CORS del browser.
+        */
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+        const datiInvio =
+            new URLSearchParams();
 
-                body: JSON.stringify({
-                    riga: riga
-                })
-            }
+        datiInvio.append(
+            "riga",
+            riga
         );
+
+
+        const risposta =
+            await fetch(
+                WEBHOOK_RECUPERO,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        datiInvio.toString()
+                }
+            );
 
 
         if (!risposta.ok) {
 
             throw new Error(
-                "Errore nella comunicazione con il server. Codice: "
+                "Errore nella comunicazione con Activepieces. Codice HTTP: "
                 + risposta.status
             );
 
@@ -618,16 +638,69 @@ async function recuperaDati() {
         );
 
 
-        if (!risultato || !risultato.nome) {
+        /*
+        Controlliamo che Activepieces
+        abbia realmente restituito i dati.
+        */
+
+        if (
+            !risultato ||
+            !risultato.nome ||
+            !risultato.servizio
+        ) {
 
             throw new Error(
-                "I dati della richiesta non sono disponibili."
+                "Activepieces non ha restituito i dati della richiesta."
             );
 
         }
 
 
-        dati = risultato;
+        /*
+        Salviamo i dati recuperati.
+        */
+
+        dati = {
+
+            riga:
+                risultato.riga || riga,
+
+            nome:
+                risultato.nome || "",
+
+            telefono:
+                risultato.telefono || "",
+
+            servizio:
+                risultato.servizio || "",
+
+            prezzo:
+                risultato.prezzo || "",
+
+            indirizzo:
+                risultato.indirizzo || "",
+
+            data:
+                risultato.data || "",
+
+            fascia_oraria:
+                risultato.fascia_oraria || "",
+
+            preferenze:
+                risultato.preferenze || "",
+
+            preferenza_contatto:
+                risultato.preferenza_contatto || "",
+
+            email:
+                risultato.email || ""
+
+        };
+
+
+        /*
+        Dati recuperati correttamente.
+        */
 
         mostra("startBox");
 
@@ -639,15 +712,25 @@ async function recuperaDati() {
             errore
         );
 
+
         mostra("errorBox");
 
-        document.getElementById("errorMessage").innerText =
+
+        document.getElementById(
+            "errorMessage"
+        ).innerText =
             "Non è stato possibile recuperare i dati della precedente richiesta.";
 
     }
 
 }
 
+
+/*
+==================================================
+MANTIENI DATI
+==================================================
+*/
 
 function mantieniDati() {
 
@@ -656,6 +739,12 @@ function mantieniDati() {
 }
 
 
+/*
+==================================================
+MODIFICA DATI
+==================================================
+*/
+
 function modificaDati() {
 
     mostra("modifyBox");
@@ -663,47 +752,74 @@ function modificaDati() {
 }
 
 
+/*
+==================================================
+MODIFICA SINGOLO CAMPO
+==================================================
+*/
+
 function modificaCampo(campo) {
 
-    campoInModifica = campo;
+    campoInModifica =
+        campo;
 
 
     const labels = {
 
-        nome: "Nome",
+        nome:
+            "Nome",
 
-        telefono: "Numero di telefono",
+        telefono:
+            "Numero di telefono",
 
-        servizio: "Servizio",
+        servizio:
+            "Servizio",
 
-        indirizzo: "Indirizzo",
+        indirizzo:
+            "Indirizzo",
 
-        preferenze: "Esigenze particolari",
+        preferenze:
+            "Esigenze particolari",
 
         preferenza_contatto:
             "Preferenza di contatto",
 
-        email: "E-mail"
+        email:
+            "E-mail"
 
     };
 
 
-    document.getElementById("fieldLabel").innerText =
-        labels[campo];
+    document.getElementById(
+        "fieldLabel"
+    ).innerText =
+        labels[campo] || "Dato";
 
 
-    document.getElementById("fieldInput").value =
+    document.getElementById(
+        "fieldInput"
+    ).value =
         dati[campo] || "";
 
 
-    document.getElementById("fieldInput").placeholder =
+    document.getElementById(
+        "fieldInput"
+    ).placeholder =
         "Inserisci il nuovo valore";
 
 
-    mostra("editFieldBox");
+    mostra(
+        "editFieldBox"
+    );
 
 }
 
+
+/*
+==================================================
+SALVA MODIFICA
+==================================================
+*/
 
 function salvaCampo() {
 
@@ -716,50 +832,153 @@ function salvaCampo() {
 
     if (!valore) {
 
-        alert("Inserisci un valore.");
+        alert(
+            "Inserisci un valore."
+        );
 
         return;
 
     }
 
 
-    dati[campoInModifica] = valore;
+    dati[campoInModifica] =
+        valore;
+
+
+    /*
+    Se viene modificato il servizio,
+    aggiorniamo automaticamente il prezzo.
+    */
+
+    if (
+        campoInModifica === "servizio"
+    ) {
+
+        aggiornaPrezzo();
+
+    }
+
 
     mostraRiepilogoModifiche();
 
 }
 
 
-function mostraRiepilogoModifiche() {
+/*
+==================================================
+CALCOLO PREZZO
+==================================================
+*/
 
-    document.getElementById("modifiedSummary")
-        .innerHTML = creaRiepilogo();
+function aggiornaPrezzo() {
 
-    mostra("modifiedSummaryBox");
+    switch (
+        dati.servizio
+    ) {
+
+        case "Pulizia appartamento":
+
+            dati.prezzo = "10";
+
+            break;
+
+
+        case "Pulizia condominio fino a 4 piani":
+
+            dati.prezzo = "20";
+
+            break;
+
+
+        case "Pulizia condominio straordinaria fino a 4 piani":
+
+            dati.prezzo = "40";
+
+            break;
+
+
+        default:
+
+            dati.prezzo = "";
+
+            break;
+
+    }
 
 }
 
+
+/*
+==================================================
+RIEPILOGO MODIFICHE
+==================================================
+*/
+
+function mostraRiepilogoModifiche() {
+
+    document.getElementById(
+        "modifiedSummary"
+    ).innerHTML =
+        creaRiepilogo();
+
+
+    mostra(
+        "modifiedSummaryBox"
+    );
+
+}
+
+
+/*
+==================================================
+CONFERMA MODIFICA
+==================================================
+*/
 
 function confermaModifica() {
 
-    mostra("dateBox");
+    mostra(
+        "dateBox"
+    );
 
 }
 
+
+/*
+==================================================
+ANNULLA MODIFICA
+==================================================
+*/
 
 function annullaModifica() {
 
-    mostra("dateBox");
+    mostra(
+        "dateBox"
+    );
 
 }
 
+
+/*
+==================================================
+TORNA ALLA MODIFICA
+==================================================
+*/
 
 function tornaModifica() {
 
-    mostra("modifyBox");
+    mostra(
+        "modifyBox"
+    );
 
 }
 
+
+/*
+==================================================
+SELEZIONE DATA
+==================================================
+*/
 
 function continuaData() {
 
@@ -771,38 +990,69 @@ function continuaData() {
 
     if (!nuovaData) {
 
-        alert("Seleziona una data.");
+        alert(
+            "Seleziona una data."
+        );
 
         return;
 
     }
 
 
-    dati.data = nuovaData;
+    dati.data =
+        nuovaData;
 
-    mostra("timeBox");
+
+    mostra(
+        "timeBox"
+    );
 
 }
 
 
+/*
+==================================================
+SELEZIONE ORARIO
+==================================================
+*/
+
 function selezionaOrario(orario) {
 
-    dati.fascia_oraria = orario;
+    dati.fascia_oraria =
+        orario;
+
 
     mostraRiepilogoFinale();
 
 }
 
 
+/*
+==================================================
+RIEPILOGO FINALE
+==================================================
+*/
+
 function mostraRiepilogoFinale() {
 
-    document.getElementById("finalSummary")
-        .innerHTML = creaRiepilogo();
+    document.getElementById(
+        "finalSummary"
+    ).innerHTML =
+        creaRiepilogo();
 
-    mostra("summaryBox");
+
+    mostra(
+        "summaryBox"
+    );
 
 }
 
+
+/*
+==================================================
+CREAZIONE RIEPILOGO
+==================================================
+*/
 
 function creaRiepilogo() {
 
@@ -823,10 +1073,21 @@ function creaRiepilogo() {
             ${escapeHtml(dati.servizio)}
         </p>
 
-        <p>
-            <strong>Prezzo:</strong>
-            ${escapeHtml(dati.prezzo)} €
-        </p>
+        ${
+            dati.prezzo
+                ? `
+                    <p>
+                        <strong>Prezzo:</strong>
+                        ${escapeHtml(dati.prezzo)} €
+                    </p>
+                  `
+                : `
+                    <p>
+                        <strong>Prezzo:</strong>
+                        Da concordare
+                    </p>
+                  `
+        }
 
         <p>
             <strong>Indirizzo:</strong>
@@ -856,7 +1117,8 @@ function creaRiepilogo() {
         <p>
             <strong>E-mail:</strong>
             ${escapeHtml(
-                dati.email || "Non indicata"
+                dati.email ||
+                "Non indicata"
             )}
         </p>
 
@@ -865,34 +1127,82 @@ function creaRiepilogo() {
 }
 
 
+/*
+==================================================
+PROTEZIONE HTML
+==================================================
+*/
+
 function escapeHtml(valore) {
 
-    if (!valore) {
+    if (
+        valore === null ||
+        valore === undefined
+    ) {
+
         return "";
+
     }
 
+
     return String(valore)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
 
 /*
- * INVIO NUOVA RICHIESTA
- *
- * Questo collegamento verrà completato
- * nel passaggio successivo.
- */
+==================================================
+INVIO NUOVA RICHIESTA
+==================================================
+
+ATTENZIONE:
+Questa parte per ora mostra soltanto
+la schermata finale.
+
+Il vero invio della nuova prenotazione
+verrà collegato ad Activepieces nel
+prossimo passaggio.
+*/
+
 async function inviaNuovaRichiesta() {
 
-    mostra("successBox");
+    mostra(
+        "successBox"
+    );
 
 }
 
+
+/*
+==================================================
+AVVIO
+==================================================
+*/
 
 recuperaDati();
 

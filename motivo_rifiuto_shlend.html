@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rifiuto richiesta - Shlend</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        p {
+            line-height: 1.5;
+        }
+
+        .reason-button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #dc3545;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .reason-button:hover {
+            opacity: 0.9;
+        }
+
+        #otherBox {
+            display: none;
+            margin-top: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+        }
+
+        #confirmButton {
+            width: 100%;
+            padding: 15px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #333;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .info {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Rifiuta richiesta</h1>
+
+    <p>
+        Seleziona il motivo per cui vuoi rifiutare questa richiesta:
+    </p>
+
+    <button
+        class="reason-button"
+        onclick="inviaRifiuto('Data non disponibile')">
+        Data non disponibile
+    </button>
+
+    <button
+        class="reason-button"
+        onclick="inviaRifiuto('Orario non disponibile')">
+        Orario non disponibile
+    </button>
+
+    <button
+        class="reason-button"
+        onclick="mostraAltro()">
+        Altro
+    </button>
+
+    <div id="otherBox">
+
+        <textarea
+            id="motivoAltro"
+            placeholder="Scrivi il motivo del rifiuto...">
+        </textarea>
+
+        <button
+            id="confirmButton"
+            onclick="inviaAltro()">
+            Conferma rifiuto
+        </button>
+
+    </div>
+
+    <div class="info">
+        La richiesta verrà aggiornata automaticamente.
+    </div>
+
+</div>
+
+<script>
+
+    // WEBHOOK DEL NUOVO FLOW ACTIVEPIECES
+    const webhook =
+        "https://cloud.activepieces.com/api/v1/webhooks/6YOLOLxs0StckGzpWsw5g";
+
+
+    // Recupera il numero della riga dall'URL
+    const parametri = new URLSearchParams(window.location.search);
+
+    const riga = parametri.get("riga");
+
+
+    // Mostra il campo "Altro"
+    function mostraAltro() {
+
+        document.getElementById("otherBox").style.display = "block";
+
+    }
+
+
+    // Invia il motivo scelto
+    function inviaRifiuto(motivo) {
+
+        if (!riga) {
+
+            alert("Numero della riga non presente.");
+
+            return;
+        }
+
+
+        const url =
+            webhook
+            + "?azione=rifiuta"
+            + "&riga=" + encodeURIComponent(riga)
+            + "&motivo=" + encodeURIComponent(motivo);
+
+
+        window.location.href = url;
+
+    }
+
+
+    // Invia il motivo personalizzato
+    function inviaAltro() {
+
+        const motivo =
+            document.getElementById("motivoAltro").value.trim();
+
+
+        if (!motivo) {
+
+            alert("Inserisci il motivo del rifiuto.");
+
+            return;
+        }
+
+
+        inviaRifiuto(motivo);
+
+    }
+
+</script>
+
+</body>
+</html>

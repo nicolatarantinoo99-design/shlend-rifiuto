@@ -88,12 +88,21 @@
             color: #666;
             text-align: center;
         }
+
+        #success {
+            display: none;
+            text-align: center;
+        }
+
+        #success h2 {
+            color: #198754;
+        }
     </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="container" id="mainBox">
 
     <h1>Rifiuta richiesta</h1>
 
@@ -123,8 +132,7 @@
 
         <textarea
             id="motivoAltro"
-            placeholder="Scrivi il motivo del rifiuto...">
-        </textarea>
+            placeholder="Scrivi il motivo del rifiuto..."></textarea>
 
         <button
             id="confirmButton"
@@ -140,20 +148,43 @@
 
 </div>
 
+
+<div class="container" id="success">
+
+    <h2>Rifiuto registrato</h2>
+
+    <p>
+        La richiesta è stata rifiutata correttamente.
+    </p>
+
+    <p>
+        Il motivo del rifiuto è stato registrato.
+    </p>
+
+</div>
+
+
+<!-- Iframe nascosto che riceve la risposta di Activepieces -->
+<iframe
+    name="hiddenFrame"
+    id="hiddenFrame"
+    style="display:none;">
+</iframe>
+
+
 <script>
 
-    // WEBHOOK DEL NUOVO FLOW ACTIVEPIECES
     const webhook =
-    "https://cloud.activepieces.com/api/v1/webhooks/77I35a0lKgE27zcXTZGkj";
+        "https://cloud.activepieces.com/api/v1/webhooks/77I35a0lKgE27zcXTZGkj";
 
 
-    // Recupera il numero della riga dall'URL
-    const parametri = new URLSearchParams(window.location.search);
+    const parametri =
+        new URLSearchParams(window.location.search);
 
-    const riga = parametri.get("riga");
+    const riga =
+        parametri.get("riga");
 
 
-    // Mostra il campo "Altro"
     function mostraAltro() {
 
         document.getElementById("otherBox").style.display = "block";
@@ -161,45 +192,82 @@
     }
 
 
-    // Invia il motivo scelto
     function inviaRifiuto(motivo) {
 
-    if (!riga) {
-        alert("Numero della riga non presente.");
-        return;
+        if (!riga) {
+
+            alert("Numero della riga non presente.");
+
+            return;
+        }
+
+
+        const form =
+            document.createElement("form");
+
+
+        form.method = "POST";
+
+        form.action = webhook;
+
+        form.target = "hiddenFrame";
+
+
+        const azioneInput =
+            document.createElement("input");
+
+        azioneInput.type = "hidden";
+
+        azioneInput.name = "azione";
+
+        azioneInput.value = "rifiuta";
+
+
+        const rigaInput =
+            document.createElement("input");
+
+        rigaInput.type = "hidden";
+
+        rigaInput.name = "riga";
+
+        rigaInput.value = riga;
+
+
+        const motivoInput =
+            document.createElement("input");
+
+        motivoInput.type = "hidden";
+
+        motivoInput.name = "motivo";
+
+        motivoInput.value = motivo;
+
+
+        form.appendChild(azioneInput);
+
+        form.appendChild(rigaInput);
+
+        form.appendChild(motivoInput);
+
+
+        document.body.appendChild(form);
+
+
+        form.submit();
+
+
+        // Mostra la conferma all'utente
+        setTimeout(function() {
+
+            document.getElementById("mainBox").style.display = "none";
+
+            document.getElementById("success").style.display = "block";
+
+        }, 800);
+
     }
 
-    const form = document.createElement("form");
 
-    form.method = "POST";
-    form.action = webhook;
-
-    const azioneInput = document.createElement("input");
-    azioneInput.type = "hidden";
-    azioneInput.name = "azione";
-    azioneInput.value = "rifiuta";
-
-    const rigaInput = document.createElement("input");
-    rigaInput.type = "hidden";
-    rigaInput.name = "riga";
-    rigaInput.value = riga;
-
-    const motivoInput = document.createElement("input");
-    motivoInput.type = "hidden";
-    motivoInput.name = "motivo";
-    motivoInput.value = motivo;
-
-    form.appendChild(azioneInput);
-    form.appendChild(rigaInput);
-    form.appendChild(motivoInput);
-
-    document.body.appendChild(form);
-
-    form.submit();
-    }
-
-
-    // Invia il motivo personalizzato
     function inviaAltro() {
 
         const motivo =

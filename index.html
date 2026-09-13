@@ -171,120 +171,91 @@
     style="display:none;">
 </iframe>
 
-
 <script>
 
-    const webhook =
-        "https://cloud.activepieces.com/api/v1/webhooks/77I35a0lKgE27zcXTZGkj";
+const webhook =
+    "https://cloud.activepieces.com/api/v1/webhooks/77I35a0lKgE27zcXTZGkj";
+
+const parametri =
+    new URLSearchParams(window.location.search);
+
+const riga =
+    parametri.get("riga");
 
 
-    const parametri =
-        new URLSearchParams(window.location.search);
+function mostraAltro() {
 
-    const riga =
-        parametri.get("riga");
+    document.getElementById("otherBox").style.display = "block";
+
+}
 
 
-    function mostraAltro() {
+function inviaRifiuto(motivo) {
 
-        document.getElementById("otherBox").style.display = "block";
+    if (!riga) {
 
+        alert("Numero della riga non presente.");
+
+        return;
     }
 
 
-    function inviaRifiuto(motivo) {
+    const dati = new URLSearchParams();
 
-        if (!riga) {
+    dati.append("azione", "rifiuta");
 
-            alert("Numero della riga non presente.");
+    dati.append("riga", riga);
 
-            return;
-        }
-
-
-        const form =
-            document.createElement("form");
+    dati.append("motivo", motivo);
 
 
-        form.method = "POST";
+    fetch(webhook, {
 
-        form.action = webhook;
+        method: "POST",
 
-        form.target = "hiddenFrame";
+        headers: {
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
 
+        body: dati.toString(),
 
-        const azioneInput =
-            document.createElement("input");
+        mode: "no-cors"
 
-        azioneInput.type = "hidden";
+    })
+    .then(function() {
 
-        azioneInput.name = "azione";
+        document.getElementById("mainBox").style.display = "none";
 
-        azioneInput.value = "rifiuta";
+        document.getElementById("success").style.display = "block";
 
+    })
+    .catch(function() {
 
-        const rigaInput =
-            document.createElement("input");
+        alert("Si è verificato un errore durante l'invio.");
 
-        rigaInput.type = "hidden";
+    });
 
-        rigaInput.name = "riga";
-
-        rigaInput.value = riga;
-
-
-        const motivoInput =
-            document.createElement("input");
-
-        motivoInput.type = "hidden";
-
-        motivoInput.name = "motivo";
-
-        motivoInput.value = motivo;
+}
 
 
-        form.appendChild(azioneInput);
+function inviaAltro() {
 
-        form.appendChild(rigaInput);
-
-        form.appendChild(motivoInput);
-
-
-        document.body.appendChild(form);
+    const motivo =
+        document.getElementById("motivoAltro").value.trim();
 
 
-        form.submit();
+    if (!motivo) {
 
+        alert("Inserisci il motivo del rifiuto.");
 
-        // Mostra la conferma all'utente
-        setTimeout(function() {
-
-            document.getElementById("mainBox").style.display = "none";
-
-            document.getElementById("success").style.display = "block";
-
-        }, 800);
-
+        return;
     }
 
 
-    function inviaAltro() {
+    inviaRifiuto(motivo);
 
-        const motivo =
-            document.getElementById("motivoAltro").value.trim();
-
-
-        if (!motivo) {
-
-            alert("Inserisci il motivo del rifiuto.");
-
-            return;
-        }
-
-
-        inviaRifiuto(motivo);
-
-    }
+}
 
 </script>
 

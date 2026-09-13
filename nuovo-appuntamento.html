@@ -146,11 +146,6 @@
         .field-button:hover {
             background: #f5f5f5;
         }
-
-        .small {
-            font-size: 13px;
-            color: #666;
-        }
     </style>
 </head>
 
@@ -161,6 +156,7 @@
     <!-- CARICAMENTO -->
     <div id="loading">
         <h1>Shlend</h1>
+
         <div class="loading">
             <p>Recupero dei dati della precedente richiesta...</p>
         </div>
@@ -169,13 +165,19 @@
 
     <!-- ERRORE -->
     <div id="errorBox" class="hidden">
+
         <h1>Shlend</h1>
+
         <div class="error">
+
             <strong>Impossibile recuperare la richiesta.</strong>
+
             <p id="errorMessage">
                 Si è verificato un errore.
             </p>
+
         </div>
+
     </div>
 
 
@@ -188,14 +190,24 @@
             Abbiamo recuperato i dati della tua precedente richiesta.
         </p>
 
-        <h2>Vuoi mantenere tutti i dati della precedente richiesta?</h2>
+        <h2>
+            Vuoi mantenere tutti i dati della precedente richiesta?
+        </h2>
 
-        <button class="button primary" onclick="mantieniDati()">
+        <button
+            class="button primary"
+            onclick="mantieniDati()">
+
             Mantieni tutti i dati e richiedi una nuova data
+
         </button>
 
-        <button class="button secondary" onclick="modificaDati()">
+        <button
+            class="button secondary"
+            onclick="modificaDati()">
+
             Modifica alcuni dati
+
         </button>
 
     </div>
@@ -210,36 +222,68 @@
             Seleziona il dato che vuoi modificare.
         </p>
 
-        <button class="field-button" onclick="modificaCampo('nome')">
+        <button
+            class="field-button"
+            onclick="modificaCampo('nome')">
+
             Nome
+
         </button>
 
-        <button class="field-button" onclick="modificaCampo('telefono')">
+        <button
+            class="field-button"
+            onclick="modificaCampo('telefono')">
+
             Numero di telefono
+
         </button>
 
-        <button class="field-button" onclick="modificaCampo('servizio')">
+        <button
+            class="field-button"
+            onclick="modificaCampo('servizio')">
+
             Servizio
+
         </button>
 
-        <button class="field-button" onclick="modificaCampo('indirizzo')">
+        <button
+            class="field-button"
+            onclick="modificaCampo('indirizzo')">
+
             Indirizzo
+
         </button>
 
-        <button class="field-button" onclick="modificaCampo('preferenze')">
+        <button
+            class="field-button"
+            onclick="modificaCampo('preferenze')">
+
             Esigenze particolari
+
         </button>
 
-        <button class="field-button" onclick="modificaCampo('preferenza_contatto')">
+        <button
+            class="field-button"
+            onclick="modificaCampo('preferenza_contatto')">
+
             Preferenza di contatto
+
         </button>
 
-        <button class="field-button" onclick="modificaCampo('email')">
+        <button
+            class="field-button"
+            onclick="modificaCampo('email')">
+
             E-mail
+
         </button>
 
-        <button class="button gray" onclick="annullaModifica()">
+        <button
+            class="button gray"
+            onclick="annullaModifica()">
+
             Annulla modifica e conferma dati
+
         </button>
 
     </div>
@@ -255,39 +299,57 @@
         <input
             type="text"
             id="fieldInput"
-            placeholder=""
-        >
+            placeholder="">
 
-        <button class="button primary" onclick="salvaCampo()">
+        <button
+            class="button primary"
+            onclick="salvaCampo()">
+
             Salva modifica
+
         </button>
 
-        <button class="button gray" onclick="tornaModifica()">
+        <button
+            class="button gray"
+            onclick="tornaModifica()">
+
             Indietro
+
         </button>
 
     </div>
 
 
-    <!-- CONFERMA MODIFICHE -->
+    <!-- RIEPILOGO MODIFICHE -->
     <div id="modifiedSummaryBox" class="hidden">
 
         <h1>Riepilogo dati</h1>
 
-        <div id="modifiedSummary" class="summary"></div>
+        <div
+            id="modifiedSummary"
+            class="summary">
+        </div>
 
-        <button class="button primary" onclick="confermaModifica()">
+        <button
+            class="button primary"
+            onclick="confermaModifica()">
+
             Conferma modifica e procedi
+
         </button>
 
-        <button class="button gray" onclick="annullaModifica()">
+        <button
+            class="button gray"
+            onclick="annullaModifica()">
+
             Annulla modifica e conferma dati
+
         </button>
 
     </div>
 
 
-    <!-- SCELTA DATA -->
+    <!-- NUOVA DATA -->
     <div id="dateBox" class="hidden">
 
         <h1>Nuova data</h1>
@@ -302,17 +364,20 @@
 
         <input
             type="date"
-            id="newDate"
-        >
+            id="newDate">
 
-        <button class="button primary" onclick="continuaData()">
+        <button
+            class="button primary"
+            onclick="continuaData()">
+
             Continua
+
         </button>
 
     </div>
 
 
-    <!-- SCELTA ORARIO -->
+    <!-- NUOVO ORARIO -->
     <div id="timeBox" class="hidden">
 
         <h1>Fascia oraria</h1>
@@ -321,44 +386,84 @@
             Scegli la fascia oraria preferita.
         </p>
 
-        <button class="field-button" onclick="selezionaOrario('08:00 - 09:00')">
+        <button
+            class="field-button"
+            onclick="selezionaOrario('08:00 - 09:00')">
+
             08:00 - 09:00
+
         </button>
 
-        <button class="field-button" onclick="selezionaOrario('09:00 - 10:00')">
+        <button
+            class="field-button"
+            onclick="selezionaOrario('09:00 - 10:00')">
+
             09:00 - 10:00
+
         </button>
 
-        <button class="field-button" onclick="selezionaOrario('10:00 - 11:00')">
+        <button
+            class="field-button"
+            onclick="selezionaOrario('10:00 - 11:00')">
+
             10:00 - 11:00
+
         </button>
 
-        <button class="field-button" onclick="selezionaOrario('11:00 - 12:00')">
+        <button
+            class="field-button"
+            onclick="selezionaOrario('11:00 - 12:00')">
+
             11:00 - 12:00
+
         </button>
 
-        <button class="field-button" onclick="selezionaOrario('12:00 - 13:00')">
+        <button
+            class="field-button"
+            onclick="selezionaOrario('12:00 - 13:00')">
+
             12:00 - 13:00
+
         </button>
 
-        <button class="field-button" onclick="selezionaOrario('13:00 - 14:00')">
+        <button
+            class="field-button"
+            onclick="selezionaOrario('13:00 - 14:00')">
+
             13:00 - 14:00
+
         </button>
 
-        <button class="field-button" onclick="selezionaOrario('14:00 - 15:00')">
+        <button
+            class="field-button"
+            onclick="selezionaOrario('14:00 - 15:00')">
+
             14:00 - 15:00
+
         </button>
 
-        <button class="field-button" onclick="selezionaOrario('15:00 - 16:00')">
+        <button
+            class="field-button"
+            onclick="selezionaOrario('15:00 - 16:00')">
+
             15:00 - 16:00
+
         </button>
 
-        <button class="field-button" onclick="selezionaOrario('16:00 - 17:00')">
+        <button
+            class="field-button"
+            onclick="selezionaOrario('16:00 - 17:00')">
+
             16:00 - 17:00
+
         </button>
 
-        <button class="field-button" onclick="selezionaOrario('17:00 - 18:00')">
+        <button
+            class="field-button"
+            onclick="selezionaOrario('17:00 - 18:00')">
+
             17:00 - 18:00
+
         </button>
 
     </div>
@@ -369,14 +474,25 @@
 
         <h1>Riepilogo richiesta</h1>
 
-        <div id="finalSummary" class="summary"></div>
+        <div
+            id="finalSummary"
+            class="summary">
+        </div>
 
-        <button class="button primary" onclick="inviaNuovaRichiesta()">
+        <button
+            class="button primary"
+            onclick="inviaNuovaRichiesta()">
+
             Conferma e invia richiesta
+
         </button>
 
-        <button class="button gray" onclick="modificaDati()">
+        <button
+            class="button gray"
+            onclick="modificaDati()">
+
             Modifica i dati
+
         </button>
 
     </div>
@@ -405,7 +521,8 @@
             </p>
 
             <p>
-                Grazie per la fiducia e per aver scelto <strong>Shlend</strong>.
+                Grazie per la fiducia e per aver scelto
+                <strong>Shlend</strong>.
             </p>
 
         </div>
@@ -417,424 +534,397 @@
 
 <script>
 
-    /*
-     * WEBHOOK ACTIVEPIECES
-     */
-    const WEBHOOK_RECUPERO =
-        "https://cloud.activepieces.com/api/v1/webhooks/wAzBOWZNmbXk0DWMZL6iM";
+const WEBHOOK_RECUPERO =
+    "https://cloud.activepieces.com/api/v1/webhooks/wAzBOWZNmbXk0DWMZL6iM";
 
 
-    /*
-     * DATI DELLA RICHIESTA
-     */
-    let dati = {
-        riga: "",
-        nome: "",
-        telefono: "",
-        servizio: "",
-        prezzo: "",
-        indirizzo: "",
-        data: "",
-        fascia_oraria: "",
-        preferenze: "",
-        preferenza_contatto: "",
-        email: ""
+let dati = {
+    riga: "",
+    nome: "",
+    telefono: "",
+    servizio: "",
+    prezzo: "",
+    indirizzo: "",
+    data: "",
+    fascia_oraria: "",
+    preferenze: "",
+    preferenza_contatto: "",
+    email: ""
+};
+
+
+let campoInModifica = "";
+
+
+function mostra(id) {
+
+    const sezioni = [
+        "loading",
+        "errorBox",
+        "startBox",
+        "modifyBox",
+        "editFieldBox",
+        "modifiedSummaryBox",
+        "dateBox",
+        "timeBox",
+        "summaryBox",
+        "successBox"
+    ];
+
+    sezioni.forEach(function(sezione) {
+
+        document
+            .getElementById(sezione)
+            .classList.add("hidden");
+
+    });
+
+    document
+        .getElementById(id)
+        .classList.remove("hidden");
+}
+
+
+const parametri =
+    new URLSearchParams(window.location.search);
+
+const riga =
+    parametri.get("riga");
+
+
+/*
+ * RECUPERO DATI
+ *
+ * MODIFICATO:
+ * usiamo application/x-www-form-urlencoded
+ * invece di application/json
+ */
+async function recuperaDati() {
+
+    if (!riga) {
+
+        mostra("errorBox");
+
+        document.getElementById("errorMessage").innerText =
+            "Numero della richiesta non presente.";
+
+        return;
+    }
+
+
+    try {
+
+        const risposta = await fetch(
+            WEBHOOK_RECUPERO,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+                },
+
+                body:
+                    "riga=" +
+                    encodeURIComponent(riga)
+            }
+        );
+
+
+        if (!risposta.ok) {
+
+            throw new Error(
+                "Errore nella comunicazione con il server."
+            );
+
+        }
+
+
+        const risultato =
+            await risposta.json();
+
+
+        if (!risultato || !risultato.nome) {
+
+            throw new Error(
+                "I dati della richiesta non sono disponibili."
+            );
+
+        }
+
+
+        dati = risultato;
+
+        mostra("startBox");
+
+
+    } catch (errore) {
+
+        console.error(errore);
+
+        mostra("errorBox");
+
+        document.getElementById("errorMessage").innerText =
+            "Non è stato possibile recuperare i dati della precedente richiesta.";
+
+    }
+
+}
+
+
+function mantieniDati() {
+
+    mostra("dateBox");
+
+}
+
+
+function modificaDati() {
+
+    mostra("modifyBox");
+
+}
+
+
+function modificaCampo(campo) {
+
+    campoInModifica = campo;
+
+
+    const labels = {
+
+        nome: "Nome",
+
+        telefono: "Numero di telefono",
+
+        servizio: "Servizio",
+
+        indirizzo: "Indirizzo",
+
+        preferenze: "Esigenze particolari",
+
+        preferenza_contatto:
+            "Preferenza di contatto",
+
+        email: "E-mail"
+
     };
 
 
-    let campoInModifica = "";
+    document.getElementById("fieldLabel").innerText =
+        labels[campo];
 
 
-    /*
-     * FUNZIONE PER MOSTRARE UNA SEZIONE
-     */
-    function mostra(id) {
+    document.getElementById("fieldInput").value =
+        dati[campo] || "";
 
-        const sezioni = [
-            "loading",
-            "errorBox",
-            "startBox",
-            "modifyBox",
-            "editFieldBox",
-            "modifiedSummaryBox",
-            "dateBox",
-            "timeBox",
-            "summaryBox",
-            "successBox"
-        ];
 
-        sezioni.forEach(function(sezione) {
+    document.getElementById("fieldInput").placeholder =
+        "Inserisci il nuovo valore";
 
-            document.getElementById(sezione)
-                .classList.add("hidden");
 
-        });
+    mostra("editFieldBox");
 
-        document.getElementById(id)
-            .classList.remove("hidden");
+}
+
+
+function salvaCampo() {
+
+    const valore =
+        document
+            .getElementById("fieldInput")
+            .value
+            .trim();
+
+
+    if (!valore) {
+
+        alert("Inserisci un valore.");
+
+        return;
+
     }
 
 
+    dati[campoInModifica] = valore;
+
+    mostraRiepilogoModifiche();
+
+}
+
+
+function mostraRiepilogoModifiche() {
+
+    document.getElementById("modifiedSummary")
+        .innerHTML = creaRiepilogo();
+
+    mostra("modifiedSummaryBox");
+
+}
+
+
+function confermaModifica() {
+
+    mostra("dateBox");
+
+}
+
+
+function annullaModifica() {
+
+    mostra("dateBox");
+
+}
+
+
+function tornaModifica() {
+
+    mostra("modifyBox");
+
+}
+
+
+function continuaData() {
+
+    const nuovaData =
+        document
+            .getElementById("newDate")
+            .value;
+
+
+    if (!nuovaData) {
+
+        alert("Seleziona una data.");
+
+        return;
+
+    }
+
+
+    dati.data = nuovaData;
+
+    mostra("timeBox");
+
+}
+
+
+function selezionaOrario(orario) {
+
+    dati.fascia_oraria = orario;
+
+    mostraRiepilogoFinale();
+
+}
+
+
+function mostraRiepilogoFinale() {
+
+    document.getElementById("finalSummary")
+        .innerHTML = creaRiepilogo();
+
+    mostra("summaryBox");
+
+}
+
+
+function creaRiepilogo() {
+
+    return `
+
+        <p>
+            <strong>Nome:</strong>
+            ${escapeHtml(dati.nome)}
+        </p>
+
+        <p>
+            <strong>Telefono:</strong>
+            ${escapeHtml(dati.telefono)}
+        </p>
+
+        <p>
+            <strong>Servizio:</strong>
+            ${escapeHtml(dati.servizio)}
+        </p>
+
+        <p>
+            <strong>Prezzo:</strong>
+            ${escapeHtml(dati.prezzo)} €
+        </p>
+
+        <p>
+            <strong>Indirizzo:</strong>
+            ${escapeHtml(dati.indirizzo)}
+        </p>
+
+        <p>
+            <strong>Data:</strong>
+            ${escapeHtml(dati.data)}
+        </p>
+
+        <p>
+            <strong>Fascia oraria:</strong>
+            ${escapeHtml(dati.fascia_oraria)}
+        </p>
+
+        <p>
+            <strong>Esigenze particolari:</strong>
+            ${escapeHtml(dati.preferenze)}
+        </p>
+
+        <p>
+            <strong>Preferenza di contatto:</strong>
+            ${escapeHtml(dati.preferenza_contatto)}
+        </p>
+
+        <p>
+            <strong>E-mail:</strong>
+            ${escapeHtml(
+                dati.email || "Non indicata"
+            )}
+        </p>
+
+    `;
+
+}
+
+
+function escapeHtml(valore) {
+
+    if (!valore) {
+        return "";
+    }
+
+    return String(valore)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/*
+ * INVIO NUOVA RICHIESTA
+ *
+ * Questa funzione verrà collegata al flow
+ * di prenotazione nel passaggio successivo.
+ */
+async function inviaNuovaRichiesta() {
+
     /*
-     * RECUPERA LA RIGA DALL'URL
+     * Per ora mostriamo il messaggio di conferma.
      *
-     * Esempio:
-     * nuovo-appuntamento.html?riga=12
+     * Nel prossimo passaggio collegheremo questo
+     * pulsante al flow Prenotazioni Chatbot.
      */
-    const parametri =
-        new URLSearchParams(window.location.search);
 
-    const riga =
-        parametri.get("riga");
+    mostra("successBox");
 
+}
 
-    /*
-     * RECUPERA I DATI DA ACTIVEPIECES
-     */
-    async function recuperaDati() {
 
-        if (!riga) {
-
-            mostra("errorBox");
-
-            document.getElementById("errorMessage").innerText =
-                "Numero della richiesta non presente.";
-
-            return;
-        }
-
-
-        try {
-
-            const risposta = await fetch(
-                WEBHOOK_RECUPERO,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        riga: riga
-                    })
-                }
-            );
-
-
-            if (!risposta.ok) {
-
-                throw new Error(
-                    "Errore nella comunicazione con il server."
-                );
-
-            }
-
-
-            const risultato =
-                await risposta.json();
-
-
-            if (!risultato || !risultato.nome) {
-
-                throw new Error(
-                    "I dati della richiesta non sono disponibili."
-                );
-
-            }
-
-
-            dati = risultato;
-
-
-            mostra("startBox");
-
-        } catch (errore) {
-
-            console.error(errore);
-
-            mostra("errorBox");
-
-            document.getElementById("errorMessage").innerText =
-                "Non è stato possibile recuperare i dati della precedente richiesta.";
-
-        }
-
-    }
-
-
-    /*
-     * MANTIENE TUTTI I DATI
-     */
-    function mantieniDati() {
-
-        mostra("dateBox");
-
-    }
-
-
-    /*
-     * MODIFICA DATI
-     */
-    function modificaDati() {
-
-        mostra("modifyBox");
-
-    }
-
-
-    /*
-     * MODIFICA SINGOLO CAMPO
-     */
-    function modificaCampo(campo) {
-
-        campoInModifica = campo;
-
-
-        const labels = {
-
-            nome: "Nome",
-
-            telefono: "Numero di telefono",
-
-            servizio: "Servizio",
-
-            indirizzo: "Indirizzo",
-
-            preferenze: "Esigenze particolari",
-
-            preferenza_contatto: "Preferenza di contatto",
-
-            email: "E-mail"
-
-        };
-
-
-        document.getElementById("fieldLabel").innerText =
-            labels[campo];
-
-
-        document.getElementById("fieldInput").value =
-            dati[campo] || "";
-
-
-        document.getElementById("fieldInput").placeholder =
-            "Inserisci il nuovo valore";
-
-
-        mostra("editFieldBox");
-
-    }
-
-
-    /*
-     * SALVA MODIFICA
-     */
-    function salvaCampo() {
-
-        const valore =
-            document.getElementById("fieldInput")
-                .value
-                .trim();
-
-
-        if (!valore) {
-
-            alert("Inserisci un valore.");
-
-            return;
-
-        }
-
-
-        dati[campoInModifica] = valore;
-
-
-        mostraRiepilogoModifiche();
-
-    }
-
-
-    /*
-     * RIEPILOGO MODIFICHE
-     */
-    function mostraRiepilogoModifiche() {
-
-        document.getElementById("modifiedSummary")
-            .innerHTML = creaRiepilogo();
-
-
-        mostra("modifiedSummaryBox");
-
-    }
-
-
-    /*
-     * CONFERMA MODIFICA
-     */
-    function confermaModifica() {
-
-        mostra("dateBox");
-
-    }
-
-
-    /*
-     * ANNULLA MODIFICA
-     */
-    function annullaModifica() {
-
-        mostra("dateBox");
-
-    }
-
-
-    /*
-     * TORNA ALLA LISTA MODIFICHE
-     */
-    function tornaModifica() {
-
-        mostra("modifyBox");
-
-    }
-
-
-    /*
-     * NUOVA DATA
-     */
-    function continuaData() {
-
-        const nuovaData =
-            document.getElementById("newDate").value;
-
-
-        if (!nuovaData) {
-
-            alert("Seleziona una data.");
-
-            return;
-
-        }
-
-
-        dati.data = nuovaData;
-
-        mostra("timeBox");
-
-    }
-
-
-    /*
-     * NUOVO ORARIO
-     */
-    function selezionaOrario(orario) {
-
-        dati.fascia_oraria = orario;
-
-        mostraRiepilogoFinale();
-
-    }
-
-
-    /*
-     * RIEPILOGO FINALE
-     */
-    function mostraRiepilogoFinale() {
-
-        document.getElementById("finalSummary")
-            .innerHTML = creaRiepilogo();
-
-
-        mostra("summaryBox");
-
-    }
-
-
-    /*
-     * CREA RIEPILOGO
-     */
-    function creaRiepilogo() {
-
-        return `
-
-            <p>
-                <strong>Nome:</strong>
-                ${escapeHtml(dati.nome)}
-            </p>
-
-            <p>
-                <strong>Telefono:</strong>
-                ${escapeHtml(dati.telefono)}
-            </p>
-
-            <p>
-                <strong>Servizio:</strong>
-                ${escapeHtml(dati.servizio)}
-            </p>
-
-            <p>
-                <strong>Prezzo:</strong>
-                ${escapeHtml(dati.prezzo)} €
-            </p>
-
-            <p>
-                <strong>Indirizzo:</strong>
-                ${escapeHtml(dati.indirizzo)}
-            </p>
-
-            <p>
-                <strong>Data:</strong>
-                ${escapeHtml(dati.data)}
-            </p>
-
-            <p>
-                <strong>Fascia oraria:</strong>
-                ${escapeHtml(dati.fascia_oraria)}
-            </p>
-
-            <p>
-                <strong>Esigenze particolari:</strong>
-                ${escapeHtml(dati.preferenze)}
-            </p>
-
-            <p>
-                <strong>Preferenza di contatto:</strong>
-                ${escapeHtml(dati.preferenza_contatto)}
-            </p>
-
-            <p>
-                <strong>E-mail:</strong>
-                ${escapeHtml(dati.email || "Non indicata")}
-            </p>
-
-        `;
-
-    }
-
-
-    /*
-     * SICUREZZA HTML
-     */
-    function escapeHtml(valore) {
-
-        if (!valore) {
-            return "";
-        }
-
-        return String(valore)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
-
-
-    /*
-     * AVVIO
-     */
-    recuperaDati();
+recuperaDati();
 
 </script>
 

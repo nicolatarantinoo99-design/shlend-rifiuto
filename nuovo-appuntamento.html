@@ -155,11 +155,13 @@
 
     <!-- CARICAMENTO -->
     <div id="loading">
+
         <h1>Shlend</h1>
 
         <div class="loading">
             <p>Recupero dei dati della precedente richiesta...</p>
         </div>
+
     </div>
 
 
@@ -225,57 +227,43 @@
         <button
             class="field-button"
             onclick="modificaCampo('nome')">
-
             Nome
-
         </button>
 
         <button
             class="field-button"
             onclick="modificaCampo('telefono')">
-
             Numero di telefono
-
         </button>
 
         <button
             class="field-button"
             onclick="modificaCampo('servizio')">
-
             Servizio
-
         </button>
 
         <button
             class="field-button"
             onclick="modificaCampo('indirizzo')">
-
             Indirizzo
-
         </button>
 
         <button
             class="field-button"
             onclick="modificaCampo('preferenze')">
-
             Esigenze particolari
-
         </button>
 
         <button
             class="field-button"
             onclick="modificaCampo('preferenza_contatto')">
-
             Preferenza di contatto
-
         </button>
 
         <button
             class="field-button"
             onclick="modificaCampo('email')">
-
             E-mail
-
         </button>
 
         <button
@@ -389,81 +377,61 @@
         <button
             class="field-button"
             onclick="selezionaOrario('08:00 - 09:00')">
-
             08:00 - 09:00
-
         </button>
 
         <button
             class="field-button"
             onclick="selezionaOrario('09:00 - 10:00')">
-
             09:00 - 10:00
-
         </button>
 
         <button
             class="field-button"
             onclick="selezionaOrario('10:00 - 11:00')">
-
             10:00 - 11:00
-
         </button>
 
         <button
             class="field-button"
             onclick="selezionaOrario('11:00 - 12:00')">
-
             11:00 - 12:00
-
         </button>
 
         <button
             class="field-button"
             onclick="selezionaOrario('12:00 - 13:00')">
-
             12:00 - 13:00
-
         </button>
 
         <button
             class="field-button"
             onclick="selezionaOrario('13:00 - 14:00')">
-
             13:00 - 14:00
-
         </button>
 
         <button
             class="field-button"
             onclick="selezionaOrario('14:00 - 15:00')">
-
             14:00 - 15:00
-
         </button>
 
         <button
             class="field-button"
             onclick="selezionaOrario('15:00 - 16:00')">
-
             15:00 - 16:00
-
         </button>
 
         <button
             class="field-button"
             onclick="selezionaOrario('16:00 - 17:00')">
-
             16:00 - 17:00
-
         </button>
 
         <button
             class="field-button"
             onclick="selezionaOrario('17:00 - 18:00')">
-
             17:00 - 18:00
-
         </button>
 
     </div>
@@ -582,6 +550,7 @@ function mostra(id) {
     document
         .getElementById(id)
         .classList.remove("hidden");
+
 }
 
 
@@ -595,9 +564,7 @@ const riga =
 /*
  * RECUPERO DATI
  *
- * MODIFICATO:
- * usiamo application/x-www-form-urlencoded
- * invece di application/json
+ * Inviamo JSON al webhook Activepieces.
  */
 async function recuperaDati() {
 
@@ -609,6 +576,7 @@ async function recuperaDati() {
             "Numero della richiesta non presente.";
 
         return;
+
     }
 
 
@@ -620,13 +588,12 @@ async function recuperaDati() {
                 method: "POST",
 
                 headers: {
-                    "Content-Type":
-                        "application/x-www-form-urlencoded"
+                    "Content-Type": "application/json"
                 },
 
-                body:
-                    "riga=" +
-                    encodeURIComponent(riga)
+                body: JSON.stringify({
+                    riga: riga
+                })
             }
         );
 
@@ -634,7 +601,8 @@ async function recuperaDati() {
         if (!risposta.ok) {
 
             throw new Error(
-                "Errore nella comunicazione con il server."
+                "Errore nella comunicazione con il server. Codice: "
+                + risposta.status
             );
 
         }
@@ -642,6 +610,12 @@ async function recuperaDati() {
 
         const risultato =
             await risposta.json();
+
+
+        console.log(
+            "Risposta Activepieces:",
+            risultato
+        );
 
 
         if (!risultato || !risultato.nome) {
@@ -660,7 +634,10 @@ async function recuperaDati() {
 
     } catch (errore) {
 
-        console.error(errore);
+        console.error(
+            "Errore recupero dati:",
+            errore
+        );
 
         mostra("errorBox");
 
@@ -907,17 +884,10 @@ function escapeHtml(valore) {
 /*
  * INVIO NUOVA RICHIESTA
  *
- * Questa funzione verrà collegata al flow
- * di prenotazione nel passaggio successivo.
+ * Questo collegamento verrà completato
+ * nel passaggio successivo.
  */
 async function inviaNuovaRichiesta() {
-
-    /*
-     * Per ora mostriamo il messaggio di conferma.
-     *
-     * Nel prossimo passaggio collegheremo questo
-     * pulsante al flow Prenotazioni Chatbot.
-     */
 
     mostra("successBox");
 
